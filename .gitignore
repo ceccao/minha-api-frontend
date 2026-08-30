@@ -1,0 +1,4 @@
+﻿# Sera substituido pelo .gitignore gerado pelo 'ng new' na FASE 15
+node_modules/
+dist/
+.angular/

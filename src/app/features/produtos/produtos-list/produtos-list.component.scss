@@ -1,0 +1,27 @@
+.produtos-list {
+  padding: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .erro {
+    color: #c0392b;
+  }
+
+  .total {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
+}

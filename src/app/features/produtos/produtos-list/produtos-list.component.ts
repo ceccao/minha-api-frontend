@@ -1,12 +1,13 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { ProdutoService } from '../services/produto.service';
 import { Produto } from '../models/produto.model';
 
 @Component({
   selector: 'app-produtos-list',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './produtos-list.component.html',
   styleUrl: './produtos-list.component.scss'
 })

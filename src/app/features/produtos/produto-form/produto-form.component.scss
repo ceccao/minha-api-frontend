@@ -1,0 +1,39 @@
+.produto-form {
+  padding: 1.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+
+  .campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+
+    label {
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+
+    input {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  }
+
+  .erro-campo {
+    color: #c0392b;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  .erro-geral {
+    color: #c0392b;
+    margin-bottom: 1rem;
+  }
+
+  .acoes {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}

@@ -1,6 +1,8 @@
 <div class="produtos-list">
   <h1>Produtos</h1>
 
+  <a routerLink="/produtos/novo" class="botao-novo">+ Novo Produto</a>
+
   @if (carregando()) {
     <p>Carregando...</p>
   } @else if (erro()) {

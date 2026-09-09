@@ -33,11 +33,25 @@ export class ProdutosListComponent implements OnInit {
         this.totalItens.set(resultado.totalItens);
         this.carregando.set(false);
       },
-      // Tratamento de erro basico por enquanto - a FASE 16 (interceptor de erro
-      // lendo ProblemDetails) deixa isso mais rico, com a mensagem real da API.
       error: () => {
         this.erro.set('Não foi possível carregar os produtos. Tente novamente.');
         this.carregando.set(false);
+      }
+    });
+  }
+
+  protected excluir(produto: Produto): void {
+    // Confirm() nativo por simplicidade - sem dependencia nova so pra isso.
+    // Trocar por um modal de verdade fica pra quando o design system entrar.
+    const confirmou = confirm(`Tem certeza que deseja excluir "${produto.nome}"?`);
+    if (!confirmou) {
+      return;
+    }
+
+    this.produtoService.excluir(produto.id).subscribe({
+      next: () => this.carregar(),
+      error: () => {
+        this.erro.set(`Não foi possível excluir "${produto.nome}".`);
       }
     });
   }

@@ -5,5 +5,6 @@ import { ProdutoFormComponent } from './features/produtos/produto-form/produto-f
 export const routes: Routes = [
   { path: 'produtos', component: ProdutosListComponent },
   { path: 'produtos/novo', component: ProdutoFormComponent },
+  { path: 'produtos/:id/editar', component: ProdutoFormComponent },
   { path: '', redirectTo: 'produtos', pathMatch: 'full' }
 ];

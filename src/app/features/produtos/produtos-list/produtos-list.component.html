@@ -18,6 +18,7 @@
           <th>Nome</th>
           <th>Preço</th>
           <th>Ativo</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -27,6 +28,10 @@
             <td>{{ produto.nome }}</td>
             <td>{{ produto.preco | currency:'BRL' }}</td>
             <td>{{ produto.ativo ? 'Sim' : 'Não' }}</td>
+            <td class="acoes">
+              <a [routerLink]="['/produtos', produto.id, 'editar']">Editar</a>
+              <button (click)="excluir(produto)">Excluir</button>
+            </td>
           </tr>
         }
       </tbody>

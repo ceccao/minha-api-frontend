@@ -1,0 +1,29 @@
+<div class="login">
+  <h1>Entrar</h1>
+
+  <form [formGroup]="form" (ngSubmit)="entrar()">
+    <div class="campo">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" formControlName="email" autocomplete="username" />
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <span class="erro-campo">Informe um e-mail válido.</span>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" formControlName="senha" autocomplete="current-password" />
+      @if (form.controls.senha.invalid && form.controls.senha.touched) {
+        <span class="erro-campo">Senha é obrigatória.</span>
+      }
+    </div>
+
+    @if (erro()) {
+      <p class="erro-geral" role="alert">{{ erro() }}</p>
+    }
+
+    <button type="submit" [disabled]="entrando()">
+      {{ entrando() ? 'Entrando...' : 'Entrar' }}
+    </button>
+  </form>
+</div>

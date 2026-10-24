@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, hml, dev ]
+  pull_request:
+    branches: [ main, hml, dev ]
+
+jobs:
+  frontend:
+    name: Build + testes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - run: npm ci
+      - run: npm run build
+      - run: npx ng test --watch=false
+
+      # Informativo (nao bloqueia): hoje restam achados so de ferramentas de desenvolvimento e
+      # do SSR (que esta app nao usa); o Dependabot propoe o upgrade coerente do Angular.
+      - name: Scan de dependencias vulneraveis
+        continue-on-error: true
+        run: npm audit --audit-level=high

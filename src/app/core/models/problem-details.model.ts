@@ -1,4 +1,4 @@
-// Espelha o formato que o ExceptionMiddleware (backend, CrossCutting) devolve em
+// Espelha o formato que o GlobalExceptionHandler (backend, CrossCutting) devolve em
 // qualquer erro - RFC 7807 (ProblemDetails).
 export interface ProblemDetails {
   type?: string;

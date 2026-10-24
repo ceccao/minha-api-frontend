@@ -3,13 +3,27 @@
 
   <a routerLink="/produtos/novo" class="botao-novo">+ Novo Produto</a>
 
+  <form class="filtros" (submit)="$event.preventDefault(); filtrar()">
+    <label for="filtro-nome">Nome</label>
+    <input id="filtro-nome" name="nome" type="search" [value]="filtroNome" (input)="filtroNome = $any($event.target).value" />
+
+    <label for="filtro-situacao">Situação</label>
+    <select id="filtro-situacao" name="situacao" (change)="filtroSituacao = $any($event.target).value === '' ? '' : +$any($event.target).value">
+      <option value="">Todas</option>
+      <option [value]="Situacao.Ativo">Ativo</option>
+      <option [value]="Situacao.Inativo">Inativo</option>
+    </select>
+
+    <button type="submit">Filtrar</button>
+  </form>
+
   @if (carregando()) {
     <p>Carregando...</p>
   } @else if (erro()) {
     <p class="erro">{{ erro() }}</p>
     <button (click)="carregar()">Tentar novamente</button>
   } @else if (produtos().length === 0) {
-    <p>Nenhum produto cadastrado ainda.</p>
+    <p>Nenhum produto encontrado.</p>
   } @else {
     <table>
       <thead>
@@ -17,7 +31,7 @@
           <th>Id</th>
           <th>Nome</th>
           <th>Preço</th>
-          <th>Ativo</th>
+          <th>Situação</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -27,7 +41,7 @@
             <td>{{ produto.id }}</td>
             <td>{{ produto.nome }}</td>
             <td>{{ produto.preco | currency:'BRL' }}</td>
-            <td>{{ produto.ativo ? 'Sim' : 'Não' }}</td>
+            <td>{{ produto.situacao === Situacao.Ativo ? 'Ativo' : 'Inativo' }}</td>
             <td class="acoes">
               <a [routerLink]="['/produtos', produto.id, 'editar']">Editar</a>
               <button (click)="excluir(produto)">Excluir</button>
@@ -36,6 +50,12 @@
         }
       </tbody>
     </table>
+
+    <nav class="paginacao" aria-label="Paginação">
+      <button type="button" (click)="irParaPagina(pagina() - 1)" [disabled]="pagina() <= 1">Anterior</button>
+      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+      <button type="button" (click)="irParaPagina(pagina() + 1)" [disabled]="pagina() >= totalPaginas()">Próxima</button>
+    </nav>
     <p class="total">Total: {{ totalItens() }}</p>
   }
 </div>

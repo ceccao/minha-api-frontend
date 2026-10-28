@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProdutoService } from '../services/produto.service';
-import { Produto } from '../models/produto.model';
+import { ListarProdutosParams, Produto, Situacao } from '../models/produto.model';
 
 @Component({
   selector: 'app-produtos-list',
@@ -14,12 +14,33 @@ import { Produto } from '../models/produto.model';
 export class ProdutosListComponent implements OnInit {
   private readonly produtoService = inject(ProdutoService);
 
+  protected readonly Situacao = Situacao;
+
   protected readonly produtos = signal<Produto[]>([]);
   protected readonly carregando = signal(true);
   protected readonly erro = signal<string | null>(null);
   protected readonly totalItens = signal(0);
+  protected readonly pagina = signal(1);
+  protected readonly totalPaginas = signal(1);
+
+  // Filtros aceitos pela API: nome e situacao.
+  protected filtroNome = '';
+  protected filtroSituacao: '' | Situacao = '';
 
   ngOnInit(): void {
+    this.carregar();
+  }
+
+  protected filtrar(): void {
+    this.pagina.set(1);
+    this.carregar();
+  }
+
+  protected irParaPagina(pagina: number): void {
+    if (pagina < 1 || pagina > this.totalPaginas()) {
+      return;
+    }
+    this.pagina.set(pagina);
     this.carregar();
   }
 
@@ -27,10 +48,17 @@ export class ProdutosListComponent implements OnInit {
     this.carregando.set(true);
     this.erro.set(null);
 
-    this.produtoService.listar().subscribe({
+    const params: ListarProdutosParams = {
+      pg: this.pagina(),
+      nome: this.filtroNome.trim() || undefined,
+      situacao: this.filtroSituacao === '' ? undefined : this.filtroSituacao
+    };
+
+    this.produtoService.listar(params).subscribe({
       next: (resultado) => {
         this.produtos.set(resultado.itens);
         this.totalItens.set(resultado.totalItens);
+        this.totalPaginas.set(Math.max(resultado.totalPaginas, 1));
         this.carregando.set(false);
       },
       error: () => {
@@ -42,7 +70,6 @@ export class ProdutosListComponent implements OnInit {
 
   protected excluir(produto: Produto): void {
     // Confirm() nativo por simplicidade - sem dependencia nova so pra isso.
-    // Trocar por um modal de verdade fica pra quando o design system entrar.
     const confirmou = confirm(`Tem certeza que deseja excluir "${produto.nome}"?`);
     if (!confirmou) {
       return;

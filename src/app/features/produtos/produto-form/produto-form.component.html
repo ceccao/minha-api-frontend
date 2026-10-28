@@ -9,7 +9,7 @@
         <label for="nome">Nome</label>
         <input id="nome" type="text" formControlName="nome" />
         @if (form.controls.nome.invalid && form.controls.nome.touched) {
-          <span class="erro-campo">Nome é obrigatório (máximo 100 caracteres).</span>
+          <span class="erro-campo">Nome é obrigatório (de 3 a 100 caracteres).</span>
         }
       </div>
 

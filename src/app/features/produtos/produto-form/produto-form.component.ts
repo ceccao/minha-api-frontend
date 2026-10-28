@@ -23,10 +23,13 @@ export class ProdutoFormComponent implements OnInit {
 
   private produtoId: number | null = null;
 
-  // Mesmas regras do Criar/AtualizarProdutoCommandValidator (backend): nome
-  // obrigatorio ate 100 caracteres, preco nao pode ser negativo.
+  // Versao lida do produto: volta no PUT para a API detectar edicao concorrente (409).
+  private version: number | undefined;
+
+  // Mesmas regras do ProdutoRequestValidator (backend): nome de 3 a 100 caracteres,
+  // preco nao pode ser negativo.
   protected readonly form = this.fb.nonNullable.group({
-    nome: ['', [Validators.required, Validators.maxLength(100)]],
+    nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     preco: [0, [Validators.required, Validators.min(0)]]
   });
 
@@ -47,6 +50,7 @@ export class ProdutoFormComponent implements OnInit {
     this.produtoService.obterPorId(id).subscribe({
       next: (produto) => {
         this.form.patchValue({ nome: produto.nome, preco: produto.preco });
+        this.version = produto.version;
         this.carregando.set(false);
       },
       error: () => {
@@ -65,15 +69,15 @@ export class ProdutoFormComponent implements OnInit {
     this.salvando.set(true);
     this.erro.set(null);
 
-    const request = this.form.getRawValue();
+    const request = { ...this.form.getRawValue(), version: this.version };
 
     // Em modo edicao chama atualizar(); senao, criar(). O tratamento de erro e
-    // compartilhado - cobre tanto EntidadeInvalidaException (400) quanto
-    // ConflitoException (409, concorrencia otimista) do PUT.
+    // compartilhado - cobre EntidadeInvalidaException (400) e ConflitoException (409,
+    // alguem editou o produto antes).
     const operacao =
       this.modoEdicao() && this.produtoId !== null
         ? this.produtoService.atualizar(this.produtoId, request)
-        : this.produtoService.criar(request);
+        : this.produtoService.criar({ nome: request.nome, preco: request.preco });
 
     operacao.subscribe({
       next: () => this.router.navigate(['/produtos']),

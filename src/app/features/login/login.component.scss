@@ -1,0 +1,21 @@
+.login {
+  max-width: 22rem;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.erro-campo,
+.erro-geral {
+  color: #b00020;
+}
+
+button {
+  padding: 0.5rem 1.25rem;
+}

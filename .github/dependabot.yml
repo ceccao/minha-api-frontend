@@ -1,0 +1,27 @@
+version: 2
+updates:
+  # Verificacao MENSAL. Cada PR roda o CI (build e testes) e as branches protegidas exigem
+  # CI verde antes do merge.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule: { interval: "monthly" }
+    # Ignora versoes com menos de 7 dias de publicadas.
+    cooldown:
+      default-days: 7
+    groups:
+      # Os pacotes do Angular precisam subir JUNTOS (mesma versao).
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+      # Todo o resto (minor e patch) num PR so: o CI testa o conjunto de uma vez.
+      minor-e-patch:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: { interval: "monthly" }
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]

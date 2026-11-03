@@ -1,0 +1,10 @@
+<header class="topo">
+  <a routerLink="/produtos" class="marca">MinhaApi</a>
+  @if (auth.autenticado()) {
+    <button type="button" (click)="auth.logout()">Sair</button>
+  }
+</header>
+
+<main>
+  <router-outlet />
+</main>

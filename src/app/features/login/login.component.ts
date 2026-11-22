@@ -35,7 +35,7 @@ export class LoginComponent {
     this.erro.set(null);
 
     this.auth.login(this.form.getRawValue()).subscribe({
-      next: () => void this.router.navigate(['/produtos']),
+      next: () => void this.router.navigate(['/inicio']),
       error: (err: HttpErrorResponse) => {
         this.erro.set(this.mensagemDeErro(err));
         this.entrando.set(false);
@@ -48,10 +48,7 @@ export class LoginComponent {
       return 'Muitas tentativas. Aguarde um minuto e tente de novo.';
     }
 
-    // 401 traz sempre a mesma mensagem generica (a API nao diz se o e-mail existe).
     const problema = err.error as ProblemDetails | null;
-    return problema?.errors?.length
-      ? problema.errors.join(' ')
-      : (problema?.title ?? 'Não foi possível entrar. Tente novamente.');
+    return problema?.title ?? 'Não foi possível entrar. Tente novamente.';
   }
 }

@@ -28,9 +28,9 @@ describe('authInterceptor', () => {
   });
 
   it('envia o Bearer para a propria API', () => {
-    http.get('/api/v1/produtos').subscribe();
+    http.get('/api/v1/exemplo').subscribe();
 
-    const req = controller.expectOne('/api/v1/produtos');
+    const req = controller.expectOne('/api/v1/exemplo');
     expect(req.request.headers.get('Authorization')).toBe('Bearer meu-token');
   });
 
@@ -44,8 +44,8 @@ describe('authInterceptor', () => {
   it('encerra a sessao quando a API responde 401', () => {
     const logout = vi.spyOn(auth, 'logout').mockImplementation(() => undefined);
 
-    http.get('/api/v1/produtos').subscribe({ error: () => undefined });
-    controller.expectOne('/api/v1/produtos').flush({}, { status: 401, statusText: 'Unauthorized' });
+    http.get('/api/v1/exemplo').subscribe({ error: () => undefined });
+    controller.expectOne('/api/v1/exemplo').flush({}, { status: 401, statusText: 'Unauthorized' });
 
     expect(logout).toHaveBeenCalled();
   });

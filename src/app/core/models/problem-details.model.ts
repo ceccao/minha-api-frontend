@@ -6,5 +6,4 @@ export interface ProblemDetails {
   status: number;
   detail?: string;
   traceId?: string;
-  errors?: string[];
 }
